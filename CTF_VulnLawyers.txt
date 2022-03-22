@@ -1,4 +1,4 @@
-Domain: www.vulnlawyers.co.uk
+Domain: vulnlawyers.co.uk
 
 Ip: 68.183.255.206
 
