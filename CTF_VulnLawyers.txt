@@ -40,7 +40,7 @@ Contents discovery:
 
 ffuf -H "Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPbVpoYkhObGZRPT0iLCJ2ZXJpZnkiOiJkM2Y4NDQzZDI5ODZhYzIyYzFkZmMxOTJlYmJlZWY1MyJ9" -w ~/wordlists/content.txt -u "http://vulnlawyers.co.uk/FUZZ" -t 1 -p 0.1 -mc all -fc 404 -c
 
-//directories found: css, denied, images, js, login, 
+//Subpages found: css, denied, images, js, login, 
 
 //trying to get access...
 
