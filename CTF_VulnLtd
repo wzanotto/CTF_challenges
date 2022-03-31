@@ -1,0 +1,82 @@
+Domain: http://www.vulnltd.co.uk/
+IP: 68.183.255.206
+server: nginx/1.21.1
+dnsrecon:
+dnsrecon -d vulnltd.co.uk -D ~/wordlist/subdomains.txt -t brt
+subdomains: support.vulnltd.co.uk
+
+----------------support.vulnltd.co.uk---------------------------------------
+//Need to find a Support Ticket...
+
+----------------Contents discovery------------------------------------------
+ffuf -H "Cookie: " -w ~/wordlists/content.txt -u "http://vulnltd.co.uk/FUZZ" -t 1 -p 0.1 -mc all -fc 404 -c
+
+vulnltd.co.uk: contact, css, images, js, robots.txt
+vulnltd.co.uk/secr3t_l0g1n: docs, login,logout
+support.vulnltd.co.uk:
+
+---------------vulnltd.co.uk/robots.txt-------------------------------------
+User-agent: *
+Disallow: /secr3t_l0g1n/
+#1 FLAG Found
+[^FLAG^B14F856BC5AD17151A55F097E1805A01^FLAG^]
+
+---------------http://vulnltd.co.uk/secr3t_l0g1n----------------------------
+//Entering /secr3t_l0g1n/....
+//Login page appears.
+//Documentation page appears.
+//Assumptions based on documentation:
+username: guest
+password: day of the week
+//Fuzzing passwords...
+ffuf -H "Cookie:" -H "Content-Type: application/x-www-form-urlencoded" -w ~/days.txt -d "username=guest&password=FUZZ" -u "http://vulnltd.co.uk/secr3t_l0g1n/login" -fr "Invalid email/password combination entered" -t 1 -p 0.1 -mc all -fc 404 -c 
+password found: tuesday
+
+//Logging in...
+//We can set admin = true. Getting admin priviliges...
+#2 FLAG Found
+[^FLAG^F01EF758672F38E8C7BF41B0AD1BB431^FLAG^]
+
+---------------vulnltd.slack.com--------------------------------------------
+//Need an account on vulnltd.slack.com
+email: x@vulnltd.co.uk
+password:
+
+---------------trying to change contact html--------------------------------
+//Web service does not have writable access to that directory.
+//We can't change the code within the web service.
+//however we can read from the code the mail from wich we can recieve a 
+//ticket.
+start-ticket@vulnltd.co.uk 
+
+//Sending email to start-ticket@vulnltd.co.uk ...
+
+Your support ticket has been created, you can view it at http://support.vulnltd.co.uk/eznq7FRnvh
+
+Many Thanks
+
+VulnLtd - Online Support
+
+#3 FLAG Found
+[^FLAG^510C25C1CBAF74B40F1F392965F0C0BA^FLAG^]
+
+---------------http://support.vulnltd.co.uk/eznq7FRnvh----------------------
+
+//We can read messagge's sent to eznq7FRnvh-support@vulnltd.co.uk.
+//Signing up in slack with email eznq7FRnvh-support@vulnltd.co.uk.
+
+--------------slack---------------------------------------------------------
+#4 FLAG Found
+[^FLAG^4FB18A7A9AB3826AEF272FC064DD0FCB^FLAG^]
+TOKEN: CHTDKQ4GK
+//Admin Messagge:
+Admin  2:23 PM
+Can someone please look at our router? I need to make some changes but each time I login to the site ( http://159.65.18.92 ) I get an Internal Server error on each page?!?
+
+---------------http://159.65.18.92------------------------------------------
+502 Bad Gateway
+
+---------------vulnltd.co.uk/contact----------------------------------------
+//Your slack token has expired upon completing contact form.
+//Need to have a valid token to complete this form...
+
