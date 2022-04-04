@@ -19,7 +19,6 @@ support.vulnltd.co.uk:
 User-agent: *
 Disallow: /secr3t_l0g1n/
 #1 FLAG Found
-[^FLAG^B14F856BC5AD17151A55F097E1805A01^FLAG^]
 
 ---------------http://vulnltd.co.uk/secr3t_l0g1n----------------------------
 //Entering /secr3t_l0g1n/....
@@ -35,7 +34,6 @@ password found: tuesday
 //Logging in...
 //We can set admin = true. Getting admin priviliges...
 #2 FLAG Found
-[^FLAG^F01EF758672F38E8C7BF41B0AD1BB431^FLAG^]
 
 ---------------vulnltd.slack.com--------------------------------------------
 //Need an account on vulnltd.slack.com
@@ -58,7 +56,6 @@ Many Thanks
 VulnLtd - Online Support
 
 #3 FLAG Found
-[^FLAG^510C25C1CBAF74B40F1F392965F0C0BA^FLAG^]
 
 ---------------http://support.vulnltd.co.uk/eznq7FRnvh----------------------
 
@@ -67,7 +64,6 @@ VulnLtd - Online Support
 
 --------------slack---------------------------------------------------------
 #4 FLAG Found
-[^FLAG^4FB18A7A9AB3826AEF272FC064DD0FCB^FLAG^]
 TOKEN: CHTDKQ4GK
 //Admin Messagge:
 Admin  2:23 PM
