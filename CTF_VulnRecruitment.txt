@@ -32,7 +32,6 @@ curl -H "Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNG
 
 //entering http://b38f1-uploads.vulnrecruitment.co.uk/...
 #1 FLAG Found
-//[^FLAG^5C7FD96F39216FB4B5ADD5A87B531D69^FLAG^]
 
 -------------in search of the missing employee-----------------------------
 
@@ -111,7 +110,7 @@ ffuf -X POST -u http://vulnrecruitment.co.uk/staff/portal/login -H "Cookie: ctfc
 //Loging in with security number...
 
 #2 FLAG Found
-[^FLAG^7A35DD5278F7B5C98A8DB179992C63D8^FLAG^]
+
 //Lost employee found: amelia.nixon@vulnrecruitment.co.uk
 
 //Fuzzing login page with email: amelia.nixon@vulnrecruitment.co.uk
@@ -128,7 +127,7 @@ What is the name of your local pub?
 Answer: The New Welcome Sailor
 
 #3 FLAG Found
-[^FLAG^F3D19DE5581B3DC332AA5D317E5A2CE7^FLAG^]
+
 //Seems like Amelia was an admin.
 
 ----------------getting admin privilage------------------------------------
@@ -137,4 +136,3 @@ Answer: The New Welcome Sailor
  redirect?url=http://admin.vulnrecruitment.co.uk
  
  #4 FLAG Found
-[^FLAG^AA739EA021524ACDBE103293E12E5E32^FLAG^]
