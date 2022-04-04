@@ -1,0 +1,17 @@
+Domain: www.fakecoin.co.uk
+Ip: 68.183.255.206
+Cookie: ctfchallenge=PREMIUMeyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPblJ5ZFdWOSIsInZlcmlmeSI6IjljMzNjOTAyM2M4NzRjNGM0MTgwYzBiMDg2NGJmMTE1In0=; token=NmMzMWI1ZjE2OTVlYTNhNGY1N2MxMjM0NGU5M2M1YjYxYjQ1YTQ4ZGUyYTQ0NWFmYjY0Mjc2OGIwODFkMTQ5ZDFmOWZmZGE0YzJiMDY4ZjE5ZGY3YjE5ODJlODYyODRkZGIwMGM0YmE1ZmJmYWMyZTMxMDhjN2FkY2NmNzljZDA%3D
+
+------------------------------Enumeration-----------------------------------
+content: assets, dashboard, login, logout, signup,invite-only
+subdomains:
+
+//signup page redirects to invite-only 
+//it is possible to sign us using POST method
+POST /signup HTTP/1.1
+signup_frm_username=user&signup_frm_password=password
+
+#1 FLAG Found
+
+-----------------------------dashboard--------------------------------------
+//When logged into the website we need to verify the profile.
