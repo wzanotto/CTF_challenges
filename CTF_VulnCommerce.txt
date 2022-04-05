@@ -7,20 +7,24 @@ nslookup -type=any vulncommerce.co.uk 8.8.8.8
 #1 FLAG
 
 dnsrecon:
-dnsrecon -d vulncommerce.co.uk -D ~/wordlist/subdomains.txt -t brt
 //Subdomains found: 
-
+hq.vulncommerce.co.uk (8.8.17.22) 
+web-version-manager.vulncommerce.co.uk (192.9.1.122)
 
 ----------------Content discovery-------------------------------------------
-ffuf -H "Cookie: "  -w ~/wordlists/content.txt -u "http://vulncommerce.co.uk/FUZZ?session_id=ZWFiNjdjMjY4NTQyOTE3Y2I1OWVhZGQzNjY1MmZjNjE2Yjc4MTc3NDNlZmU3YWIyMzY0NzM5ZmJjYWZjZDBjY2MwY2ZjOTdlYTVjZGI3NTI2OTgyNDU4ZTFkZWRkNDc0ODc2YzAyNjlhNTU5OThkZWQxMDhlZDcyMDkzNWM1MWE=" -t 1 -p 0.1 -mc all -fc 404 -c
+ffuf -H "Cookie: "  -w ~/wordlists/content.txt -u "http://vulncommerce.co.uk/FUZZ?session_id=" -t 1 -p 0.1 -mc all -fc 404 -c
 
 
 vulncommerce.co.uk: basket, login, logout, profile, stats
 
+----------------------------stats-------------------------------------------
+//Server Status
+
+#2 FLAG Found
+
 ---------------------------main page----------------------------------------
-/:
 //visible session id:
-session_id=ZWFiNjdjMjY4NTQyOTE3Y2I1OWVhZGQzNjY1MmZjNjE2Yjc4MTc3NDNlZmU3YWIyMzY0NzM5ZmJjYWZjZDBjY2MwY2ZjOTdlYTVjZGI3NTI2OTgyNDU4ZTFkZWRkNDc0ODc2YzAyNjlhNTU5OThkZWQxMDhlZDcyMDkzNWM1MWE=
+session_id=
 
 //Weird latin text in homepage:
 translation:
@@ -86,26 +90,11 @@ There's no username and password for it because the only place you can view it f
 ---------------------------/adm1n-man4gem3nt-12bfb3-------------------------
 Connection from (my ip) not allowed.
 
-//We will need to open this page from HQ.
-server: nginx/1.21.1
-IP: 68.183.255.206
-nameserver = ns1.digitalocean.com
-IP: 139.59.142.21
-
-ffuf -H "X-Forwarded-For: FUZZ" -H "Cookie: "  -w ~/ip.txt -u "http://www.vulncommerce.co.uk/adm1n-man4gem3nt-12bfb3" -H "Content-Type: application/x-www-form-urlencoded" -t 1 -p 0.1 -mc all -fc 404 -c -fr "Connection from FUZZ"
-
+//Hitting a wall here
+...
 
 ----------------------------login-------------------------------------------
 //login form uses csrf protection token
 //login page freezes for 3600 sec after unsuccessful attempt
 //it's no use FUZZing it. 
 //username:admin exists.
-
-----------------------------stats-------------------------------------------
-//Server Status
-
-#2 FLAG Found
-
-
-//Testing Ip's 
-ffuf -X POST -d "ping_target=FUZZ" -H "Cookie: "  -w ~/ip.txt -u "http://www.vulncommerce.co.uk/stats" -H "Content-Type: application/x-www-form-urlencoded" -t 1 -p 0.1 -mc all -fc 404 -c -fr "PASS"
