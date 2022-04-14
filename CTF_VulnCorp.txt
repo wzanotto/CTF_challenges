@@ -1,0 +1,42 @@
+Domain: www.vulncorp.co.uk
+Ip: 68.183.255.206
+server: nginx/1.21.1
+
+nslookup:
+nslookup -type=any vulncorp.co.uk 8.8.8.8
+//there is mail exchanger
+
+dnsrecon:
+chat.vulncorp.co.uk 
+webmail.vulncorp.co.uk
+prueba.vulncorp.co.uk
+
+----------------chat.vulncorp.co.uk-----------------------------------------
+//Creating new account
+api: 
+//Can make request to rooms and users by setting X-Token. This makes seeing other rooms and users
+//particularly hard.
+
+Resetting password...
+http://chat.vulncorp.co.uk/login/[hash]/[user-id]/1649954[3-digit-random]
+
+hash: bXCX4AcY
+Api key: YTE0NTZiNDQ4MDEyN2E0ZTllYTFmZTYyOGEyMmJhNDVjNTQ0NjVhNzEzOTFkOTk1YWIwYWNiM2MyNjkzZTM5MGU2ZDYxY2E0ZjU3NjgxMTgyMjNkOTNmNGVhOThkYTYyOWQ4MDM0NDIyMTZlMzM3NDczODc4NTIyYTcxYTlhYmQ=
+"id":854,"name":"Staff Room"
+"Cannot create Room as your account has not been authorised"
+"id":928,"disabled":false,"name":"No Name","email":"wiroh76111@eosbuzz.com"
+
+----------------webmail.vulncorp.co.uk/login--------------------------------
+
+
+----------------Content discovery-------------------------------------------
+ffuf -H "Cookie: "  -w ~/wordlists/content.txt -u "http://vulncorp.co.uk/FUZZ" -t 1 -p 0.1 -mc all -fc 404 -c
+
+vulncorp.co.uk/ admin, contact, css, images, js, phpmyadmin
+
+----------------------------stats-------------------------------------------
+//Server Status
+
+#2 FLAG Found
+
+---------------------------main page----------------------------------------
