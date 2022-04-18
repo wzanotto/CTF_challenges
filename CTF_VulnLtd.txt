@@ -71,8 +71,3 @@ Can someone please look at our router? I need to make some changes but each time
 
 ---------------http://159.65.18.92------------------------------------------
 502 Bad Gateway
-
----------------vulnltd.co.uk/contact----------------------------------------
-//Your slack token has expired upon completing contact form.
-//Need to have a valid token to complete this form...
-
