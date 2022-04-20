@@ -2,9 +2,9 @@ Target: http://www.vulncompany.co.uk/
 
 --------Enumeration---------
 
-nameserver: ns1.digitalocean.com
+nameserver: ns1.digitalocean.com (173.245.58.51), ns2.digitalocean.com (173.245.59.41), ns3.digitalocean.com (198.41.222.173)
 content found: _scripts
-subdomains: ppp18-private
+subdomains: ppp18-private (67.207.71.104)
 
 -------ppp18-private--------
 Due to someone finding this website on the internet we've given it another subdomain.
