@@ -1,0 +1,23 @@
+--------Enumeration---------
+
+content found: _scripts
+subdomains: ppp18-private
+
+-------ppp18-private--------
+Due to someone finding this website on the internet we've given it another subdomain.
+It will only work with the companies internal DNS server so that will keep the hackers/public out!
+--------_scripts------------
+
+flag.txt:
+#1 FLAG Found
+
+vulnanalytics:
+Module for storing visitor data on our API
+http://vulnanalytics.co.uk
+
+-----vulnanalytics.co.uk-----
+no content.
+
+php module:
+Creates and stores subdomains in API. 
+
