@@ -1,5 +1,8 @@
+Target: http://www.vulncompany.co.uk/
+
 --------Enumeration---------
 
+nameserver: ns1.digitalocean.com
 content found: _scripts
 subdomains: ppp18-private
 
