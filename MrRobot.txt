@@ -63,6 +63,9 @@ Post exploitation
 
 terminal stabilization...
 python -c 'import pty;pty.spawn("/bin/bash")'
+export TERM=xterm
+(ctr+Z the target shell)
+stty raw -echo; fg
 
 second key in /home/robot
 cat password.raw-md5
